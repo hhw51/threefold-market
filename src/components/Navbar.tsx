@@ -10,20 +10,20 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           <Link to="/" className="text-2xl font-space-grotesk font-bold">
-            3D Store
+            JEWELRY
           </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-12">
             <Link to="/" className="nav-link">
-              Home
+              Collections
             </Link>
             <Link to="/products" className="nav-link">
-              Products
+              Shop
             </Link>
             <Link to="/about" className="nav-link">
-              About
+              Our Story
             </Link>
             <Button
               variant="ghost"
@@ -54,19 +54,19 @@ export const Navbar = () => {
               to="/"
               className="block px-3 py-2 text-base font-medium hover:text-primary"
             >
-              Home
+              Collections
             </Link>
             <Link
               to="/products"
               className="block px-3 py-2 text-base font-medium hover:text-primary"
             >
-              Products
+              Shop
             </Link>
             <Link
               to="/about"
               className="block px-3 py-2 text-base font-medium hover:text-primary"
             >
-              About
+              Our Story
             </Link>
           </div>
         </div>
