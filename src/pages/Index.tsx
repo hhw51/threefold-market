@@ -1,29 +1,23 @@
 
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
-
-const products = [
-  {
-    id: "1",
-    name: "Diamond Pendant Necklace",
-    price: 1299.99,
-    modelUrl: "/models/necklace.glb",
-  },
-  {
-    id: "2",
-    name: "Sapphire Ring",
-    price: 899.99,
-    modelUrl: "/models/ring.glb",
-  },
-  {
-    id: "3",
-    name: "Pearl Earrings",
-    price: 549.99,
-    modelUrl: "/models/earrings.glb",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
+  const { data: products } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FFFFFF] to-[#F8F9FA]">
       <Navbar />
@@ -37,7 +31,7 @@ const Index = () => {
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">
             Discover our collection of exquisite jewelry pieces, each crafted with precision
-            and brought to life through immersive 3D visualization.
+            and brought to life through immersive visualization.
           </p>
         </div>
       </section>
@@ -46,8 +40,14 @@ const Index = () => {
       <section className="container py-24">
         <h2 className="text-3xl font-bold mb-12 text-center">Featured Collection</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
+          {products?.slice(0, 3).map((product) => (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              price={product.price}
+              modelUrl={product.image_url}
+            />
           ))}
         </div>
       </section>

@@ -3,15 +3,33 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
+
+const CATEGORIES = ["All", "Necklaces", "Rings", "Earrings", "Bracelets"];
 
 const Products = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
   const { data: products, isLoading, error } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", selectedCategory],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("products")
         .select("*")
         .order("created_at", { ascending: false });
+
+      if (selectedCategory !== "All") {
+        query = query.ilike("image_url", `%/${selectedCategory.toLowerCase()}/%`);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       return data;
@@ -48,8 +66,28 @@ const Products = () => {
       
       {/* Products Grid */}
       <section className="container pt-32 pb-16">
-        <h1 className="text-4xl font-bold mb-12 text-center">Our Collection</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="flex flex-col items-center gap-8">
+          <h1 className="text-4xl font-bold text-center">Our Collection</h1>
+          
+          {/* Category Selector */}
+          <Select
+            value={selectedCategory}
+            onValueChange={setSelectedCategory}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {CATEGORIES.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12">
           {products?.map((product) => (
             <ProductCard
               key={product.id}
