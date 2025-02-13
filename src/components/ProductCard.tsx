@@ -1,6 +1,5 @@
 
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "react-router-dom";
 
 interface ProductCardProps {
   id: string;
@@ -11,13 +10,12 @@ interface ProductCardProps {
 
 export const ProductCard = ({ id, name, price, modelUrl }: ProductCardProps) => {
   return (
-    <Link href={`/product/${id}`} className="product-card group">
+    <Link to={`/product/${id}`} className="product-card group">
       <div className="product-image relative aspect-square">
-        <Image 
+        <img 
           src={modelUrl} 
           alt={name}
-          fill
-          className="object-cover hover:scale-105 transition-transform duration-300"
+          className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
         />
       </div>
       <h3 className="product-title font-space-grotesk">{name}</h3>
