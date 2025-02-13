@@ -1,21 +1,23 @@
 
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 
 interface ProductCardProps {
   id: string;
   name: string;
   price: number;
-  modelUrl: string;  // This will now be used as imageUrl
+  modelUrl: string;
 }
 
 export const ProductCard = ({ id, name, price, modelUrl }: ProductCardProps) => {
   return (
-    <Link to={`/product/${id}`} className="product-card group">
-      <div className="product-image">
-        <img 
+    <Link href={`/product/${id}`} className="product-card group">
+      <div className="product-image relative aspect-square">
+        <Image 
           src={modelUrl} 
           alt={name}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          fill
+          className="object-cover hover:scale-105 transition-transform duration-300"
         />
       </div>
       <h3 className="product-title font-space-grotesk">{name}</h3>
